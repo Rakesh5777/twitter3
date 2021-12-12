@@ -5,6 +5,7 @@ import twitter3 from "./utils/twitter3.json"
 import './App.css';
 import loaderSVG from './utils/loader.svg';
 import classNames from "classnames";
+import moment from 'moment'
 
 export default function App() {
 
@@ -14,8 +15,8 @@ export default function App() {
   const [warn, setWarn] = useState(false);
   const [loader, setLoader] = useState(false);
   const [allTweets, setAllTweets] = useState([]);
-  const [currentNetwork,] = useState('Ropsten');
-  const contractAddress = "0xa3cb30F8d494CC3695582996ABC58b704f8e84bE";
+  const currentNetwork = 'Ropsten';
+  const contractAddress = "0x72Ea8e02218090D1F4393Abd12Ab03c7922A6314";
   const contractABI = twitter3.abi;
 
   const checkMetaMask = () => {
@@ -58,7 +59,7 @@ export default function App() {
   const checkAccoutAndSetState = (account) => {
     if (account) {
       setCurrentAccount(account[0]);
-      console.log('account found', account[0]);
+      console.log('Your Metamask account id : ', account[0]);
     }
   }
 
@@ -67,9 +68,9 @@ export default function App() {
       if (!checkMsg()) return;
       const twitter3Contract = getTwitter3Contract();
       let count = await twitter3Contract.getTweetsCount();
+      setLoader(true);
       console.log('previous count : ', count.toNumber());
       const tweetTxn = await twitter3Contract.tweet(message);
-      setLoader(true);
       console.log('minning started ...', tweetTxn.hash);
       await tweetTxn.wait();
       console.log('minning finished ...', tweetTxn.hash);
@@ -79,8 +80,7 @@ export default function App() {
     } catch (err) {
       console.log(err);
       setLoader(false);
-      alert(`kindly check your network in Metamask wallet it has to ${currentNetwork} Network!`);
-      setMessage('');
+      handleErr(err);
     }
   }
 
@@ -90,11 +90,11 @@ export default function App() {
     return !!message;
   }
 
-  const getAllTweets = async () => {
+  const getAllTweets = async (loader = true) => {
     try {
       const twitter3Contract = getTwitter3Contract();
       console.log('getting all tweets ...');
-      setLoader(true);
+      if (loader) setLoader(true);
       const tweets = await twitter3Contract.getAllTweets();
       const tweetsArray = tweets.map(tweet => {
         return {
@@ -109,7 +109,7 @@ export default function App() {
     } catch (err) {
       console.log(err);
       setLoader(false);
-      alert(`kindly check your network in Metamask wallet it has to ${currentNetwork} Network!`);
+      handleErr(err);
     }
   }
 
@@ -123,14 +123,7 @@ export default function App() {
   const onNewTweet = (from, timestamp, tweet) => {
     console.log('new tweet', from, timestamp, tweet);
     setMessage('');
-    setAllTweets(prevState => [
-      ...prevState,
-      {
-        address: from,
-        timestamp: new Date(timestamp * 1000),
-        tweet: tweet,
-      },
-    ]);
+    getAllTweets(false);
   };
 
   const resetState = () => {
@@ -139,13 +132,22 @@ export default function App() {
     setMessage('');
     setWarn(false);
     setAllTweets([]);
+    setLoader(false);
+  }
+
+  const handleErr = (err) => {
+    const errorMsg = err.message.includes("Wait 1 Mints to Tweet again")
+      ? 'You need to wait 1 mints to tweet again! let ether nodes to cool down'
+      : `Something went wrong! are you sure is your network is ${currentNetwork}`;
+    alert(errorMsg);
   }
 
   useEffect(() => {
-    if (checkMetaMask()) {
-      getTwitter3Contract().on('NewTweet', onNewTweet);
-      return () => { getTwitter3Contract().off('NewTweet', onNewTweet); resetState() };
-    }
+    if (checkMetaMask()) getTwitter3Contract().on('NewTweet', onNewTweet);
+    return () => {
+      if (!!getTwitter3Contract()) getTwitter3Contract().off('NewTweet', onNewTweet);
+      resetState();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -182,8 +184,8 @@ export default function App() {
           <div className="bio">
             Hey I'm Rakesh, People dont need to be too smart to write a smart contract or to use smart contract , so connect your metamask wallet and write your first web3 tweet!
           </div>
-          <div className="flex">
-            <button className="waveButton" onClick={connectWallet}>
+          <div className="flex-column-justify-center ">
+            <button className="waveButton ripple" onClick={connectWallet}>
               Connect Wallet
             </button>
           </div>
@@ -192,24 +194,26 @@ export default function App() {
 
         {metamask && currentAccount && <div>
           <div className="bio">
-            Hey I'm Rakesh, People dont need to be too smart to write a smart contract or to use smart contract , start writing your web3 tweet!
+            Hey I'm Rakesh, People dont need to be too smart to write a smart contract or to use smart contract , start writing your web3 tweet! Check console of the browser to see all the cool stuff of Txn and minning Data!
           </div>
-          <div className="flex">
-            <input label="Message" placeholder={warn ? "Tweet Cant be empty in Blockchain!" : "Enter your tweet here, to store in blockchain ;)"}
-              value={message} onChange={e => { setMessage(e.target.value); setWarn(false) }} className={btnClass} />
+          <div className="flex-column-justify-center ">
+            <input label="Message" maxLength="120" placeholder={warn ? "Tweet Cant be empty in Blockchain!" : "Enter your tweet here, to store in blockchain ;)"}
+              value={message} onChange={e => { setMessage(e.target.value); setWarn(false) }} className={btnClass} onKeyPress={(e) => { if (e.key === 'Enter') tweet() }} />
 
-            <button className="waveButton" onClick={tweet}>
+            <button className="waveButton ripple" onClick={tweet}>
               Tweet
             </button>
           </div>
-          <div className='tweetsContainer flex-direction-column'>
-            <div className="bio">{allTweets.length ? `All Tweets on Blockchain (${allTweets.length})` : "There are no Tweets in the Blockchain"}</div>
+          <div id="style-4" className='tweetsContainer flex-direction-column'>
+            <div className="bio">{allTweets.length ? `All Tweets in Twitter-3.0 Block (${allTweets.length})` : "There are no Tweets in the Blockchain"}</div>
             {allTweets.map((tweetData, index) => {
               return (
                 <div key={index} className="tweet-card">
-                  <div>Address: {tweetData.address}</div>
-                  <div>Time: {tweetData.timestamp.toString()}</div>
-                  <div>tweet: {tweetData.tweet}</div>
+                  <div className="lineSpace"><span className="tweetName">Tweet</span> {tweetData.tweet}</div>
+                  <div className="flex-space-between-pad-1">
+                    <div className="bio">{tweetData.address}</div>
+                    <div className="bio">{moment(tweetData.timestamp).format('DD/MM/YYYY')}</div>
+                  </div>
                 </div>)
             })}
           </div>

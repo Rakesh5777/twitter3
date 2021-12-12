@@ -1,3 +1,32 @@
+#style-4::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #f5f5f5;
+}
+
+#style-4::-webkit-scrollbar {
+  width: 5px;
+  background-color: #f5f5f5;
+}
+
+#style-4::-webkit-scrollbar-thumb {
+  background-color: #9e9e9e;
+}
+
+.ripple {
+  background-position: center;
+  transition: background 0.8s;
+}
+.ripple:hover {
+  background: #47a7f5 radial-gradient(circle, transparent 1%, #47a7f5 1%)
+    center/15000%;
+}
+.ripple:active {
+  background-color: #6eb9f7;
+  background-size: 100%;
+  transition: background 0s;
+}
+
 .mainContainer {
   display: flex;
   justify-content: center;
@@ -34,11 +63,17 @@
   background-color: #00bbd4d5;
 }
 
-.flex {
+.flex-column-justify-center {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+
+.flex-space-between-pad-1 {
+  display: flex;
+  justify-content: space-between;
+  padding: 0rem, 1rem;
 }
 
 input {
@@ -80,7 +115,14 @@ input:focus {
 .tweet-card {
   background-color: rgba(35, 148, 192, 0.322);
   margin-top: 16px;
-  padding: 8px;
+  padding: 25px;
+  width: 30rem;
+  border-radius: 20px;
+  border-top-left-radius: 0%;
+}
+
+.lineSpace {
+  line-height: 1.9rem;
 }
 
 .overlay {
@@ -108,4 +150,12 @@ input:focus {
   justify-content: center;
   display: grid;
   z-index: 2000;
+}
+
+.tweetName {
+  padding: 8px;
+  background-color: rgba(78, 173, 185, 0.438);
+  border-radius: 10px;
+  margin-left: -10px;
+  margin-right: 10px;
 }
