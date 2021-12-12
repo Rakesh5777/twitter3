@@ -1,0 +1,111 @@
+.mainContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 64px;
+}
+
+.dataContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 600px;
+}
+
+.header {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.bio {
+  text-align: center;
+  color: gray;
+  margin-top: 16px;
+}
+
+.waveButton {
+  cursor: pointer;
+  margin-top: 16px;
+  padding: 8px;
+  border: 0;
+  border-radius: 5px;
+  width: 20rem;
+  background-color: #00bbd4d5;
+}
+
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+input {
+  margin-top: 16px;
+  padding: 8px;
+  border: 3px solid rgb(4, 182, 206);
+  border-radius: 5px;
+  width: 18rem;
+}
+
+.btn-blue {
+  border-color: rgb(4, 182, 206);
+}
+
+.btn-green {
+  border-color: rgb(33, 158, 100);
+}
+
+.btn-red {
+  border-color: rgba(250, 63, 63, 0.89);
+}
+
+input:focus {
+  outline: none;
+}
+
+.tweetsContainer {
+  margin-top: 18vh;
+  height: 40vh !important;
+  overflow-y: auto;
+}
+
+.flex-direction-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tweet-card {
+  background-color: rgba(35, 148, 192, 0.322);
+  margin-top: 16px;
+  padding: 8px;
+}
+
+.overlay {
+  position: absolute;
+  width: 100%;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  z-index: 1000;
+  backdrop-filter: blur(1.7px);
+}
+
+.spinner {
+  width: 30vw !important;
+}
+
+.loading-spinner {
+  background-color: #75757567;
+  position: absolute;
+  width: 100%;
+  top: 0px;
+  left: 0px;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  display: grid;
+  z-index: 2000;
+}
