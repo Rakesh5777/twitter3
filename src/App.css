@@ -101,7 +101,7 @@ input:focus {
 }
 
 .tweetsContainer {
-  margin-top: 18vh;
+  margin-top: 10vh;
   height: 40vh !important;
   overflow-y: auto;
 }
@@ -158,4 +158,7 @@ input:focus {
   border-radius: 10px;
   margin-left: -10px;
   margin-right: 10px;
+}
+.tweet-input-container {
+  margin-top: 2rem;
 }

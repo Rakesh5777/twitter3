@@ -196,7 +196,7 @@ export default function App() {
           <div className="bio">
             Hey I'm Rakesh, People dont need to be too smart to write a smart contract or to use smart contract , start writing your web3 tweet! Check console of the browser to see all the cool stuff of Txn and minning Data!
           </div>
-          <div className="flex-column-justify-center ">
+          <div className="flex-column-justify-center tweet-input-container">
             <input label="Message" maxLength="120" placeholder={warn ? "Tweet Cant be empty in Blockchain!" : "Enter your tweet here, to store in blockchain ;)"}
               value={message} onChange={e => { setMessage(e.target.value); setWarn(false) }} className={btnClass} onKeyPress={(e) => { if (e.key === 'Enter') tweet() }} />
 
