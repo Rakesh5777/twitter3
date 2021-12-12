@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { BrowserView, MobileView } from 'react-device-detect';
 import { ethers } from "ethers";
 import twitter3 from "./utils/twitter3.json"
 import './App.css';
@@ -13,7 +14,8 @@ export default function App() {
   const [warn, setWarn] = useState(false);
   const [loader, setLoader] = useState(false);
   const [allTweets, setAllTweets] = useState([]);
-  const contractAddress = "0x3f7c905bFd2b40b28Bc32741a860D1169400B6d1";
+  const [currentNetwork,] = useState('Ropsten');
+  const contractAddress = "0xa3cb30F8d494CC3695582996ABC58b704f8e84bE";
   const contractABI = twitter3.abi;
 
   const checkMetaMask = () => {
@@ -77,6 +79,8 @@ export default function App() {
     } catch (err) {
       console.log(err);
       setLoader(false);
+      alert(`kindly check your network in Metamask wallet it has to ${currentNetwork} Network!`);
+      setMessage('');
     }
   }
 
@@ -105,6 +109,7 @@ export default function App() {
     } catch (err) {
       console.log(err);
       setLoader(false);
+      alert(`kindly check your network in Metamask wallet it has to ${currentNetwork} Network!`);
     }
   }
 
@@ -167,7 +172,9 @@ export default function App() {
         </div>
 
         {!metamask && <div className="bio">
-          To use this Dapp you need to download Metamask from <a href="https://metamask.io/">https://metamask.io/</a> kindly refresh the page after installing Metamask.
+          <BrowserView> To use this Dapp you need to download Metamask from <a href="https://metamask.io/">https://metamask.io/</a> kindly refresh the page after installing Metamask.</BrowserView>
+          <MobileView>This is D-App currently not supported in mobile phones, use this from your desktop/laptop!</MobileView>
+          <div className="bio"></div>
         </div>
         }
 
@@ -196,7 +203,7 @@ export default function App() {
             </button>
           </div>
           <div className='tweetsContainer flex-direction-column'>
-            <div className="bio">All Tweets on Blockchain ({allTweets.length})</div>
+            <div className="bio">{allTweets.length ? `All Tweets on Blockchain (${allTweets.length})` : "There are no Tweets in the Blockchain"}</div>
             {allTweets.map((tweetData, index) => {
               return (
                 <div key={index} className="tweet-card">
