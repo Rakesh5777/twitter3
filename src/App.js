@@ -173,7 +173,7 @@ export default function App() {
 
         {!metamask && <div className="bio">
           <BrowserView> To use this Dapp you need to download Metamask from <a href="https://metamask.io/">https://metamask.io/</a> kindly refresh the page after installing Metamask.</BrowserView>
-          <MobileView>This is D-App currently not supported in mobile phones, use this from your desktop/laptop!</MobileView>
+          <MobileView>This D-App currently not supported in mobile phones, use this from your desktop/laptop!</MobileView>
           <div className="bio"></div>
         </div>
         }
