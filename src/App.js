@@ -136,10 +136,9 @@ export default function App() {
   }
 
   const handleErr = (err) => {
-    const errorMsg = err.message.includes("Wait 1 Mints to Tweet again")
-      ? 'You need to wait 1 mints to tweet again! let ether nodes to cool down'
-      : `Something went wrong! are you sure is your network is ${currentNetwork}`;
-    alert(errorMsg);
+    if (err.message.includes("Wait 1 Mints to Tweet again")) {
+      alert('Please wait 1 mints to tweet again! let ether nodes to cool down');
+    }
   }
 
   useEffect(() => {
